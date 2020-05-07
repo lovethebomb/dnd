@@ -1,11 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-export const DEFAULT_CURRENCY = [
-  { name: 'Platinum', value: 0 },
-  { name: 'Gold', value: 0 },
-  { name: 'Electrum', value: 0 },
-  { name: 'Silver', value: 0 },
-  { name: 'Coppper', value: 0 }
-]
+const DEFAULT_CURRENCY = {
+  platinum: { name: 'Platinum', value: 0, enabled: true },
+  gold: { name: 'Gold', value: 0, enabled: true },
+  electrum: { name: 'Electrum', value: 0, enabled: true },
+  silver: { name: 'Silver', value: 0, enabled: true },
+  copper: { name: 'Copper', value: 0, enabled: true }
+}
 
-export const CurrencyContext = React.createContext(DEFAULT_CURRENCY);
+const CurrencyContext = React.createContext([{}, () => {}]);
+
+const CurrencyProvider = (props) => {
+  const [state, setState] = useState(DEFAULT_CURRENCY);
+  return (
+    <CurrencyContext.Provider value={[state, setState]}>
+      {props.children}
+    </CurrencyContext.Provider>
+  );
+};
+
+export { CurrencyContext, CurrencyProvider };

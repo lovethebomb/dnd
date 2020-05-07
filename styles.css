@@ -127,6 +127,8 @@ ul {
   font-weight: 600;
 }
 
+
+
 .btn:hover,
 .btn:active,
 .btn:focus {
@@ -144,6 +146,14 @@ ul {
 
 .btn-primary:active {
   background-color: #0455b3;
+}
+
+.btn[disabled],
+.btn[disalbed]:active,
+.btn[disalbed]:hover {
+  color: #f3f3f3;
+  background: lightgray;
+  cursor: not-allowed;
 }
 
 @media (max-width: 600px) {

@@ -1,16 +1,12 @@
-import { useState } from 'react'
-import ReactModal from "react-modal";
-import { useModal } from "react-modal-hook";
+import ReactModal from 'react-modal';
+import { useModal } from 'react-modal-hook';
 
+import useParty from './hooks/useParty';
 import ButtonAction from './ButtonAction'
-import AddMemberInput from './AddMemberInput'
+import useMemberInput from './AddMemberInput'
 import PartyMemberIcon from './PartyMemberIcon';
 
 ReactModal.setAppElement("#__next")
-
-const DEFAULT_PARTY = [
-  { name: 'Zerakos', icon: false }
-]
 
 const PartyMember = ({ member }) => (
   <li>
@@ -31,13 +27,9 @@ const PartyMember = ({ member }) => (
 
 const PartyList = ({ party }) => (
   <>{ party.map(member => (
-    <PartyMember key={member.name} member={member} />
+    <PartyMember key={member.id} member={member} />
   ))}</>
 )
-
-const addPartyMember = (e) => {
-  console.debug('addPartyMember click')
-}
 
 const TreasureModalStyle = {
   content: {
@@ -52,22 +44,27 @@ const TreasureModalStyle = {
 }
 
 export default () => {
-  const [party, setParty] = useState(DEFAULT_PARTY);
+  const { party, addPartyMember } = useParty();
+  const { isLoading, hasInput, icon, input, AddMemberInput } = useMemberInput();
+  const addMember = () => {
+    console.debug('click and add', input, icon);
+    addPartyMember({ name: input, icon })
+    hideModal()
+  };
 
   const [showModal, hideModal] = useModal(() => {
-
     return (
       <ReactModal
         isOpen
-        contentLabel="Add a parrty member modal"
+        contentLabel="Add a Party member modal"
         onRequestClose={hideModal}
         shouldCloseOnOverlayClick={true}
         style={TreasureModalStyle}
       >
-        <AddMemberInput />
+        { AddMemberInput({ onEnterKey: addMember }) }
         <footer>
           <ButtonAction className="modal-close" onClick={hideModal}>Cancel</ButtonAction>
-          <button className="btn btn-primary add-button" onClick={addPartyMember}>Add</button>
+          <button className="btn btn-primary add-button" onClick={addMember} disabled={isLoading || !hasInput}>Add</button>
         </footer>
         <style jsx>{`
         footer {
@@ -81,7 +78,7 @@ export default () => {
         `}</style>
       </ReactModal>
     )
-  });
+  },[isLoading, icon, input, hasInput]);
 
   return (
     <div className="Party">

@@ -1,5 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-export const DEFAULT_TREASURES = [{ 'name': 'Sample Treasure' }]
+const DEFAULT_TREASURES = [{ 'name': 'Sample Treasure' }]
 
-export const TreasureContext = React.createContext(DEFAULT_TREASURES);
+const TreasureContext = React.createContext([{}, () => {}]);
+
+
+const TreasureProvider = (props) => {
+  const [state, setState] = useState(DEFAULT_TREASURES);
+  return (
+    <TreasureContext.Provider value={[state, setState]}>
+      {props.children}
+    </TreasureContext.Provider>
+  );
+};
+
+export { TreasureContext, TreasureProvider };

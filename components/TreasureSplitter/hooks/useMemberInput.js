@@ -3,8 +3,8 @@ import fetch from 'node-fetch'
 import { useState } from 'react'
 import {DebounceInput} from 'react-debounce-input';
 
-import styles from './AddMemberInput.module.css'
-import PartyMemberIcon from './PartyMemberIcon';
+import styles from '../AddMemberInput.module.css'
+import PartyMemberIcon from '../PartyMemberIcon';
 
 const DDB_URL_REGEX = /^(http(s)?:\/\/)?(www\.)?(dndbeyond\.com|ddb\.ac)\/.*/g
 const DDB_CHARACTERID_REGEX = /characters\/(?:\d*)/g
@@ -12,13 +12,12 @@ const DDB_CHARACTERID_REGEX = /characters\/(?:\d*)/g
 // https://www.dndbeyond.com/profile/Kal0psia/characters/26045247
 // ddb.ac/characters/26045247/78qglK
 
-export default () => {
+const useMemberInput = () => {
   const [isLoading, setLoading] = useState(false)
   const [hasInput, setHasInput] = useState(false)
   const [icon, setIcon] = useState("")
   const [input, setInput] = useState("")
 
-  console.debug('render input')
   const handleChange = async (evt) => {
     const value = evt.target.value.trim()
     console.debug('handlChange', value)
@@ -144,3 +143,5 @@ export default () => {
     isLoading, hasInput, icon, input, AddMemberInput
   }
 }
+
+export default useMemberInput

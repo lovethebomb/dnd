@@ -112,15 +112,17 @@ export default () => {
       <h3>Results</h3>
       <button className="btn btn-primary" onClick={splitTreasure} disabled={false}>Split</button>
       { results.length > 0 &&
-        <div className="share">
+        <div className="results">
           <p className="coins">↣ {results.join(' ')}</p>
           <ul className="treasures">
             <TreasureToAttributeList />
           </ul>
+          <div className="share">
+          </div>
         </div>
       }
       <style jsx>{`
-      .share {
+      .results {
         margin-top: 1rem;
         border-top: 1px solid #eaeaea
       }
@@ -132,6 +134,11 @@ export default () => {
 
       .treasures {
         margin-top: 1rem
+      }
+
+      .share {
+        margin-top: 1rem;
+        border-top: 1px solid #eaeaea
       }
       `}</style>
     </div>

@@ -6,8 +6,15 @@ const useTreasure = () => {
 
     function addTreasure(treasure) {
       // TODO: use uuid
-      // treasure.id = +Date.now();
+      treasure.id = +Date.now();
       setState([...state, { id: +Date.now(), name: 'New Treasure'}])
+    }
+
+    function removeTreasure(treasure) {
+      const treasureIndex = state.findIndex(t => t.id === treasure.id)
+      const newState = [...state]
+      newState.splice(treasureIndex, 1)
+      setState(newState)
     }
 
     function setTreasureOwner(treasure, owner) {
@@ -23,6 +30,7 @@ const useTreasure = () => {
     return {
       treasures: state,
       addTreasure,
+      removeTreasure,
       setTreasureOwner
     }
 };

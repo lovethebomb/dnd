@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import TreasureSplitter from '../components/TreasureSplitter'
+import Link from 'next/link'
 
 export default function Home() {
   return (
@@ -15,7 +15,14 @@ export default function Home() {
         </h1>
 
         <div className="grid">
-          <TreasureSplitter />
+          <a href="/splitter" className="card">
+            <h3>Treasure Splitter &rarr;</h3>
+            <p>Split the loot between your party.</p>
+          </a>
+          <a href="/search" className="card">
+            <h3>Search Tool &rarr;</h3>
+            <p>Quick search through D&D APIs.</p>
+          </a>
         </div>
       </main>
     </div>

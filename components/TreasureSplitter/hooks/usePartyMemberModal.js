@@ -1,18 +1,10 @@
 import ReactModal from 'react-modal';
 import { useModal } from 'react-modal-hook';
 
-import useParty from './hooks/useParty';
-import ButtonAction from './ButtonAction'
-import useMemberInput from './AddMemberInput'
-import PartyMember from './PartyMember';
+import useParty from './useParty';
 
-ReactModal.setAppElement("#__next")
-
-const PartyList = ({ party }) => (
-  <>{ party.map(member => (
-    <PartyMember key={member.id} member={member} />
-  ))}</>
-)
+import useMemberInput from './useMemberInput'
+import ButtonAction from '../ButtonAction'
 
 const TreasureModalStyle = {
   content: {
@@ -26,16 +18,19 @@ const TreasureModalStyle = {
   }
 }
 
-export default () => {
-  const { party, addPartyMember } = useParty();
+ReactModal.setAppElement("#__next")
+
+const usePartyMemberModal = () => {
   const { isLoading, hasInput, icon, input, AddMemberInput, setLoading } = useMemberInput();
-  const addMember = () => {
-    console.debug('click and add', input, icon);
-    addPartyMember({ name: input, icon })
-    hideModal()
-  };
+  const { addPartyMember } = useParty();
 
   const [showModal, hideModal] = useModal(() => {
+    const addMember = () => {
+      console.debug('click and add', input, icon);
+      addPartyMember({ name: input, icon })
+      hideModal()
+    };
+
     return (
       <ReactModal
         isOpen
@@ -63,21 +58,10 @@ export default () => {
     )
   },[isLoading, icon, input, hasInput]);
 
-  return (
-    <div className="Party">
-      <h3>Party</h3>
-      <ul>
-        <PartyList party={party} />
-        <li>
-          <ButtonAction onClick={showModal}>Add Member</ButtonAction>
-        </li>
-      </ul>
-      <style jsx>{`
-        .Party {}
-        ul li:last-of-type {
-          margin-top: 1rem;
-        }
-      `}</style>
-    </div>
-  );
-}
+  return {
+    showModal,
+    hideModal
+  }
+};
+
+export default usePartyMemberModal

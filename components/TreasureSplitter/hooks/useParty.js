@@ -10,9 +10,17 @@ const useParty = () => {
       setState([...state, member])
     }
 
+    function removePartyMember(member) {
+      const memberIndex = state.findIndex(m => m.id === member.id)
+      const newState = [...state]
+      newState.splice(memberIndex, 1)
+      setState(newState)
+    }
+
     return {
       party: state,
-      addPartyMember
+      addPartyMember,
+      removePartyMember
     }
 };
 

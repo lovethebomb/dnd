@@ -1,7 +1,7 @@
-export default ({ icon }) => (
+export default ({ icon, size="38" }) => (
   <img className="icon"
     src={icon ? icon : '/img/default-avatar.png'}
-    width="38"
-    height="38"
+    width={size}
+    height={size}
   />
 )

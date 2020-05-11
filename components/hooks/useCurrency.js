@@ -19,9 +19,34 @@ const useCurrency = () => {
       setState({ ...state, [currency]: newCurrency })
     }
 
+    function toShortCurrencies() {
+      return Object.keys(state).map(currency => `${state[currency].value}${state[currency].short}`)
+    }
+
+    function toCopper() {
+      const cp = Object.keys(state).map(c => state[c].value * state[c].toCP)
+      console.debug('cp', cp)
+      return cp.reduce((previous, current) => previous + current)
+    }
+
+    function fromCopper(copper) {
+      // TODO: Optimize
+      const coins = {}
+      const modulo = Object.keys(state).filter(c => copper % state[c].toCP < copper)
+      modulo.map(c => {
+        const currency = state[c]
+        const truncatedCoin = Math.trunc(copper / currency.toCP)
+        copper = copper - (truncatedCoin * currency.toCP)
+        coins[c] = { name: currency.name, short: currency.short, value: truncatedCoin}
+      })
+      return coins;
+    }
+
     return {
       currencies: state,
-      currenciesKeys: () => Object.keys(state),
+      fromCopper,
+      toShortCurrencies,
+      toCopper,
       toggleEnable,
       updateCurrencyValue
     }

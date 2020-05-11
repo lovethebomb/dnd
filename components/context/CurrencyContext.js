@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 
 const DEFAULT_CURRENCY = {
-  platinum: { name: 'Platinum', value: 0, enabled: true },
-  gold: { name: 'Gold', value: 0, enabled: true },
-  electrum: { name: 'Electrum', value: 0, enabled: true },
-  silver: { name: 'Silver', value: 0, enabled: true },
-  copper: { name: 'Copper', value: 0, enabled: true }
+  platinum: { name: 'Platinum', short: 'pp', value: 0, toCP: 1000, enabled: true },
+  gold: { name: 'Gold', short: 'gp', value: 8, toCP: 100, enabled: true },
+  electrum: { name: 'Electrum',  short: 'ep', value: 0, toCP: 50, enabled: true },
+  silver: { name: 'Silver', short: 'sp', value: 4, toCP: 10, enabled: true },
+  copper: { name: 'Copper', short: 'cp', value: 0, toCP: 1, enabled: true }
 }
 
 const CurrencyContext = React.createContext([{}, () => {}]);

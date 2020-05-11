@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from "react";
-import InputNumber from 'rc-input-number';
 
 export default ({ currency, onChange }) => {
   const [inputVisible, setInputVisible] = useState(false)

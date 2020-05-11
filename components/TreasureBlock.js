@@ -1,17 +1,16 @@
 import { useContext, useState } from 'react'
 
-import { TreasureContext } from './context/TreasureContext'
+import useTreasure from './hooks/useTreasure'
 import ButtonAction from './ButtonAction'
 
 const TreasureList = ({ treasures }) => (
-  <>{ treasures.map((treasure, index) => (
-    <p key={index}>{treasure.name}</p>
+  <>{ treasures.map((treasure) => (
+    <p key={treasure.id}>{treasure.name}</p>
   ))}</>
 )
 
 export default () => {
-  const [treasures, setTreasures] = useContext(TreasureContext);
-  const addTreasure = () => { setTreasures([...treasures, { name: 'New Treasure'}])}
+  const { treasures, addTreasure } = useTreasure();
 
   return (
     <ul>

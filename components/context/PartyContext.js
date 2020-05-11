@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const DEFAULT_PARTY = [{ id: 1, name: 'Zerakos', icon: false }]
+const DEFAULT_PARTY = [{ id: 1, name: 'Zerakos', icon: 'https://www.dndbeyond.com/avatars/17/927/636378853439963263.png?width=150&height=150&fit=crop&quality=95&auto=webp' }]
 
 const PartyContext = React.createContext([{}, () => {}]);
 

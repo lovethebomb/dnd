@@ -6,7 +6,7 @@ import {DebounceInput} from 'react-debounce-input';
 import styles from './AddMemberInput.module.css'
 import PartyMemberIcon from './PartyMemberIcon';
 
-const DDB_URL_REGEX = /^(https:\/\/)?(www\.)?(dndbeyond\.com|ddb\.ac)\/.*/g
+const DDB_URL_REGEX = /^(http(s)?:\/\/)?(www\.)?(dndbeyond\.com|ddb\.ac)\/.*/g
 const DDB_CHARACTERID_REGEX = /characters\/(?:\d*)/g
 // URLS like:
 // https://www.dndbeyond.com/profile/Kal0psia/characters/26045247
@@ -18,8 +18,11 @@ export default () => {
   const [icon, setIcon] = useState("")
   const [input, setInput] = useState("")
 
+  console.debug('render input')
   const handleChange = async (evt) => {
     const value = evt.target.value.trim()
+    console.debug('handlChange', value)
+    if (value === input) { return }
 
     if (!DDB_URL_REGEX.test(value)) {
       setIcon("")

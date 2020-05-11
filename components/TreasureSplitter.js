@@ -1,5 +1,7 @@
 import Loot from './Loot'
 import Party from './Party'
+import Results from './Results'
+
 import { TreasureProvider } from './context/TreasureContext'
 import { CurrencyProvider } from './context/CurrencyContext'
 import { PartyProvider } from './context/PartyContext'
@@ -18,6 +20,9 @@ export default () => (
             </div>
             <div className="panel">
               <Party />
+            </div>
+            <div className="panel">
+              <Results />
             </div>
           </div>
           <style jsx>{`
@@ -59,4 +64,4 @@ export default () => (
       </PartyProvider>
     </CurrencyProvider>
   </TreasureProvider>
-  )
+)

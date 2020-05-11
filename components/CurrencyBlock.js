@@ -2,10 +2,10 @@ import CurrencyItem from './CurrencyItem'
 import useCurrency from './hooks/useCurrency'
 
 const CurrencyList = () => {
-  const { currencies, currenciesKeys, updateCurrencyValue } = useCurrency()
+  const { currencies, updateCurrencyValue } = useCurrency()
 
   return (
-    <ul>{ currenciesKeys().map(key => (
+    <ul>{ Object.keys(currencies).map(key => (
       <CurrencyItem
         key={currencies[key].name}
         currency={currencies[key]}

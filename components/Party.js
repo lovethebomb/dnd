@@ -4,26 +4,9 @@ import { useModal } from 'react-modal-hook';
 import useParty from './hooks/useParty';
 import ButtonAction from './ButtonAction'
 import useMemberInput from './AddMemberInput'
-import PartyMemberIcon from './PartyMemberIcon';
+import PartyMember from './PartyMember';
 
 ReactModal.setAppElement("#__next")
-
-const PartyMember = ({ member }) => (
-  <li>
-    <PartyMemberIcon icon={member.icon} />
-    <span>{member.name}</span>
-    <style jsx>{`
-    li {
-      display: flex;
-      align-items: center;
-    }
-
-    span {
-      padding-left: 1rem;
-    }
-    `}</style>
-  </li>
-)
 
 const PartyList = ({ party }) => (
   <>{ party.map(member => (
@@ -45,7 +28,7 @@ const TreasureModalStyle = {
 
 export default () => {
   const { party, addPartyMember } = useParty();
-  const { isLoading, hasInput, icon, input, AddMemberInput } = useMemberInput();
+  const { isLoading, hasInput, icon, input, AddMemberInput, setLoading } = useMemberInput();
   const addMember = () => {
     console.debug('click and add', input, icon);
     addPartyMember({ name: input, icon })

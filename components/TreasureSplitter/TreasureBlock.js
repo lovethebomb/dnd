@@ -1,6 +1,8 @@
 import { useContext, useState } from 'react'
 
 import useTreasure from './hooks/useTreasure'
+import useTreasureModal from './hooks/useTreasureModal';
+
 import ButtonAction from './ButtonAction'
 
 const TreasureList = ({ treasures, removeTreasure }) => (
@@ -24,13 +26,14 @@ const TreasureList = ({ treasures, removeTreasure }) => (
 )
 
 export default () => {
-  const { treasures, addTreasure, removeTreasure } = useTreasure();
+  const { treasures, removeTreasure } = useTreasure();
+  const { showModal } = useTreasureModal();
 
   return (
     <ul>
       <TreasureList treasures={treasures} removeTreasure={removeTreasure} />
       <li>
-        <ButtonAction onClick={addTreasure}>Add Treasure</ButtonAction>
+        <ButtonAction onClick={showModal}>Add Treasure</ButtonAction>
       </li>
     </ul>
   )

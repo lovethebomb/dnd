@@ -7,7 +7,8 @@ const useTreasure = () => {
     function addTreasure(treasure) {
       // TODO: use uuid
       treasure.id = +Date.now();
-      setState([...state, { id: +Date.now(), name: 'New Treasure'}])
+      console.debug('addTrewasure', state)
+      setState([...state, { id: +Date.now(), name: treasure.name }])
     }
 
     function removeTreasure(treasure) {

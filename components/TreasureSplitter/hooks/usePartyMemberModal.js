@@ -1,9 +1,10 @@
-import ReactModal from 'react-modal';
 import { useModal } from 'react-modal-hook';
 
 import useParty from './useParty';
 
 import useMemberInput from './useMemberInput'
+
+import { DefaultModal, DefaultModalFooter } from '../../DefaultModal'
 import ButtonAction from '../ButtonAction'
 
 const TreasureModalStyle = {
@@ -18,43 +19,27 @@ const TreasureModalStyle = {
   }
 }
 
-ReactModal.setAppElement("#__next")
-
 const usePartyMemberModal = () => {
   const { isLoading, hasInput, icon, input, AddMemberInput, setLoading } = useMemberInput();
   const { addPartyMember } = useParty();
 
   const [showModal, hideModal] = useModal(() => {
     const addMember = () => {
-      console.debug('click and add', input, icon);
       addPartyMember({ name: input, icon })
       hideModal()
     };
 
     return (
-      <ReactModal
-        isOpen
+      <DefaultModal
         contentLabel="Add a Party member modal"
         onRequestClose={hideModal}
-        shouldCloseOnOverlayClick={true}
-        style={TreasureModalStyle}
       >
         { AddMemberInput({ onEnterKey: addMember }) }
-        <footer>
+        <DefaultModalFooter>
           <ButtonAction className="modal-close" onClick={hideModal}>Cancel</ButtonAction>
           <button className="btn btn-primary add-button" onClick={addMember} disabled={isLoading || !hasInput}>Add</button>
-        </footer>
-        <style jsx>{`
-        footer {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-top: 2rem;
-          border-top: 1px solid #eaeaea;
-          padding-top: 2rem;
-        }
-        `}</style>
-      </ReactModal>
+        </DefaultModalFooter>
+      </DefaultModal>
     )
   },[isLoading, icon, input, hasInput]);
 

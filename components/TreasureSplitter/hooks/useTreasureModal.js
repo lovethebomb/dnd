@@ -1,10 +1,9 @@
-
-import ReactModal from 'react-modal';
 import { useModal } from 'react-modal-hook';
 
 import useTreasure from './useTreasure'
 import useTreasureInput from './useTreasureInput'
 
+import { DefaultModal, DefaultModalFooter } from '../../DefaultModal'
 import ButtonAction from '../ButtonAction'
 
 const TreasureModalStyle = {
@@ -19,7 +18,6 @@ const TreasureModalStyle = {
   }
 }
 
-ReactModal.setAppElement("#__next")
 
 const useTreasureModal = () => {
   const { input, hasInput, AddTreasureInput } = useTreasureInput();
@@ -33,29 +31,16 @@ const useTreasureModal = () => {
 
 
     return (
-      <ReactModal
-        isOpen
+      <DefaultModal
         contentLabel="Add a treasure modal"
         onRequestClose={hideModal}
-        shouldCloseOnOverlayClick={true}
-        style={TreasureModalStyle}
       >
         { AddTreasureInput({ onEnterKey: onAddTreasure }) }
-        <footer>
+        <DefaultModalFooter>
           <ButtonAction className="modal-close" onClick={hideModal}>Cancel</ButtonAction>
           <button className="btn btn-primary add-button" onClick={onAddTreasure} disabled={!hasInput}>Add</button>
-        </footer>
-        <style jsx>{`
-          footer {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-top: 2rem;
-          border-top: 1px solid #eaeaea;
-          padding-top: 2rem;
-        }
-        `}</style>
-      </ReactModal>
+        </DefaultModalFooter>
+      </DefaultModal>
     )
   },[input, hasInput]);
 

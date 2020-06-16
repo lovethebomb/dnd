@@ -12,6 +12,7 @@
     "next": "9.4",
     "node-fetch": "^2.6.0",
     "react": "16.13.1",
+    "react-audio-player": "^0.13.0",
     "react-debounce-input": "^3.2.2",
     "react-dom": "16.13.1",
     "react-modal": "^3.11.2",

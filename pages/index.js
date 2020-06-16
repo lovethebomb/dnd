@@ -19,7 +19,11 @@ export default function Home() {
             <h3>Treasure Splitter &rarr;</h3>
             <p>Split the loot between your party.</p>
           </a>
-          <a href="/search" className="card">
+          <a href="/radio" className="card">
+            <h3>Radio &rarr;</h3>
+            <p>Stream all these bards tunes.</p>
+          </a>
+          <a href="/search" className="card disabled">
             <h3>Search Tool &rarr;</h3>
             <p>Quick search through D&D APIs.</p>
           </a>

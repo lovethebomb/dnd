@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Link from 'next/link'
 import TreasureSplitter from '../components/TreasureSplitter/TreasureSplitter'
 
 export default function Home() {
@@ -10,6 +11,9 @@ export default function Home() {
       </Head>
 
       <main>
+        <Link href="/">
+          <a className="link">← Back to D&D Tools</a>
+        </Link>
         <h1 className="title">
           Treasure Splitter
         </h1>

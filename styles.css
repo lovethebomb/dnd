@@ -33,6 +33,10 @@ a {
   text-decoration: none;
 }
 
+.link {
+  color: #0070f3;
+}
+
 .title a {
   color: #0070f3;
   text-decoration: none;
@@ -89,6 +93,11 @@ code {
   border: 1px solid #eaeaea;
   border-radius: 10px;
   transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.card.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .card:hover,

@@ -4,11 +4,12 @@ export default ({ currency, onChange, onToggle }) => {
   const [inputVisible, setInputVisible] = useState(false)
   const inputEl = useRef(null);
 
-  const hideInput = () => { console.debug('hideInput'); setInputVisible(false)}
+  const hideInput = () => setInputVisible(false)
   const showInput = () => setInputVisible(true)
   useEffect(() => {
     if (inputVisible) {
       inputEl.current.focus();
+      inputEl.current.select();
     }
   }, [inputVisible]);
   const hideInputAndUpdate = (e) => {
@@ -23,16 +24,16 @@ export default ({ currency, onChange, onToggle }) => {
       <div className="icon"></div>
       <span className="text" onClick={onToggle}>{currency.name}</span>
       <label htmlFor={currency.name} onClick={showInput}>{currency.value}</label>
-      {inputVisible &&
         <input
           type="number"
           name="amount"
+          id={currency.name}
           max="2147483647"
           ref={inputEl}
           defaultValue={currency.value}
+          onFocus={showInput}
           onBlur={hideInputAndUpdate}
         />
-      }
 
       <style jsx>{`
         .Currency {
@@ -91,9 +92,11 @@ export default ({ currency, onChange, onToggle }) => {
 
         label {
           display: ${inputVisible ? 'none' : 'block'};
+          border: 2px solid transparent;
           padding: 0.2rem 0.5rem;
           text-align: right;
           min-width: 6rem;
+          height: 24px;
         }
 
         label:hover {
@@ -101,12 +104,19 @@ export default ({ currency, onChange, onToggle }) => {
         }
 
         input {
+          scale: ${inputVisible ? '1' : '0'};
+          overflow: hidden;
           margin-left: auto;
           flex: 2 1 auto;
           min-width: 6rem;
           width: 100%;
           font-size: 1rem;
           text-align: right;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+          margin-left: 0.2rem;
         }
       `}</style>
     </div>

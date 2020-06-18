@@ -5,6 +5,7 @@ const CurrencyList = () => {
   const { currencies, updateCurrencyValue, toggleEnable } = useCurrency()
 
   return (
+    <form>
     <ul>{ Object.keys(currencies).map(key => (
       <CurrencyItem
         key={currencies[key].name}
@@ -13,6 +14,7 @@ const CurrencyList = () => {
         onToggle={() => toggleEnable(key)}
       />
     ))}</ul>
+  </form>
   )
 }
 

@@ -50,6 +50,7 @@ export default () => (
           }
 
           .panel {
+            flex: 1 1 33%;
             min-width: 13rem;
             margin-right: 2rem;
           }

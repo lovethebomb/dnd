@@ -20,7 +20,7 @@ export default function Home() {
 
         <div className="grid">
           <div>
-            <ReactAudioPlayer controls autoPlay src="http://radio.lucas.computer:27060/live" />
+            <ReactAudioPlayer controls autoPlay volume="0.5" src="https://radio.lucas.computer:27060/live" />
           </div>
         </div>
       </main>

@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 
-export default ({ currency, onChange }) => {
+export default ({ currency, onChange, onToggle }) => {
   const [inputVisible, setInputVisible] = useState(false)
   const inputEl = useRef(null);
 
@@ -19,9 +19,9 @@ export default ({ currency, onChange }) => {
   }
 
   return (
-    <div className={`Currency ${currency.name.toLowerCase()}`}>
+    <div className={`Currency ${currency.name.toLowerCase()} ${!currency.enabled ? 'disabled' : ''}`}>
       <div className="icon"></div>
-      <span className="text">{currency.name}</span>
+      <span className="text" onClick={onToggle}>{currency.name}</span>
       <label htmlFor={currency.name} onClick={showInput}>{currency.value}</label>
       {inputVisible &&
         <input
@@ -71,6 +71,23 @@ export default ({ currency, onChange }) => {
           min-width: 7rem;
           flex: 2 1 auto;
         }
+
+        .text:hover {
+          cursor: pointer;
+          text-decoration: line-through;
+          opacity: 1;
+        }
+
+        .disabled .text {
+          text-decoration: line-through;
+          opacity: 0.6;
+        }
+
+        .disabled .text:hover {
+          cursor: pointer;
+          opacity: 0.8;
+        }
+
 
         label {
           display: ${inputVisible ? 'none' : 'block'};

@@ -8,11 +8,10 @@ const useCurrency = () => {
       const newCurrency = state[currency]
       newCurrency.enabled = !newCurrency.enabled
 
-      setState({ ...state, [newCurrency.name]: newCurrency })
+      setState({ ...state, [currency]: newCurrency })
     }
 
     function updateCurrencyValue(currency, value) {
-      console.debug('updateCurrencyValue', currency, value)
       const newCurrency = state[currency]
       newCurrency.value = value
 

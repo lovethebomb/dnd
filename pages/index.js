@@ -16,15 +16,15 @@ export default function Home() {
 
         <div className="grid">
           <a href="/splitter" className="card">
-            <h3>Treasure Splitter &rarr;</h3>
+            <h3>🎁 Treasure Splitter &rarr;</h3>
             <p>Split the loot between your party.</p>
           </a>
           <a href="/radio" className="card">
-            <h3>Radio &rarr;</h3>
-            <p>Stream all these bards tunes.</p>
+            <h3>🥁 Radio &rarr;</h3>
+            <p>Groovy bard tunes.</p>
           </a>
           <a href="/search" className="card disabled">
-            <h3>Search Tool &rarr;</h3>
+            <h3>🔍 Search Tool &rarr;</h3>
             <p>Quick search through D&D APIs.</p>
           </a>
         </div>

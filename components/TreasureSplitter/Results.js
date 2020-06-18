@@ -85,14 +85,10 @@ export default () => {
 
   const splitTreasure = (e) => {
     console.debug('[split] click');
-    // Move to hook
-    // const currenciesToSplit = currencies.filter(currency => currency.value > 0)
+    // TODO: Move to hook
     const shortCurrencies = toShortCurrencies()
-    // const treasuresToSplit = treasures.filter(treasure => treasure.value > 0)
-    // const treasuresAsString = treasures.map(t => t.name)
 
     console.debug('[split] will split ', shortCurrencies.join(', '))
-    // console.debug('[split] will split ', treasuresAsString.join(', '))
 
     // convert to copper
     // divide by number of players
@@ -100,7 +96,8 @@ export default () => {
     console.debug('[split] divide ', toCopper(), 'to ', party.length, ' = ',  divide)
     const coins =  fromCopper(divide)
 
-    console.debug('[split] each playe get', coins)
+    console.debug('[split] each player get', coins)
+
     // convert to array of usable strings
     const divideToString = Object.keys(coins).map(c => `${coins[c].value}${coins[c].short}`)
     console.debug('divideToString', divideToString)

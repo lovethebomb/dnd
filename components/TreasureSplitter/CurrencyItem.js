@@ -71,6 +71,7 @@ export default ({ currency, onChange, onToggle }) => {
           line-height: 24px;
           min-width: 7rem;
           flex: 2 1 auto;
+          font-weight: 500;
         }
 
         .text:hover {
@@ -81,12 +82,12 @@ export default ({ currency, onChange, onToggle }) => {
 
         .disabled .text {
           text-decoration: line-through;
-          opacity: 0.6;
+          opacity: 0.4;
         }
 
         .disabled .text:hover {
           cursor: pointer;
-          opacity: 0.8;
+          opacity: 0.7;
         }
 
 

@@ -105,7 +105,7 @@ export default ({ currency, onChange, onToggle }) => {
         }
 
         input {
-          scale: ${inputVisible ? '1' : '0'};
+          transform: scale(${inputVisible ? '1' : '0'});
           overflow: hidden;
           margin-left: auto;
           flex: 2 1 auto;

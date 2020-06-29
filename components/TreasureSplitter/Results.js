@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import useClipboard from 'react-use-clipboard';
+
 
 import useCurrency from './hooks/useCurrency'
 import useParty from './hooks/useParty'
@@ -78,6 +80,43 @@ const TreasureToAttributeList = () => {
   )
 }
 
+const CopyButton = ({ results }) => {
+  const { getPartyMemberById } = useParty()
+  const { treasures } = useTreasure()
+
+  // TODO: use styling for copy
+  const treasureOwner = (treasure) => { return `${getPartyMemberById(treasure.ownedBy).name}` }
+  const copyAsText = () => {
+    const treasuresList = treasures.map(treasure =>
+      `- ${treasure.name} ${treasure.ownedBy ? `for ${treasureOwner(treasure)}` : ''}`
+    )
+    const text = `↣ ${results.join(' ')}\n${treasuresList.join('\n')}`
+    console.debug('Copied', text)
+    return text
+  }
+
+  const [isCopied, setCopied] = useClipboard(copyAsText(), {
+    successDuration: 2500
+  });
+
+  return (
+    <>
+      <button className="btn btn-primary" onClick={setCopied}>
+        Copy as text
+      </button>
+      <span>
+        {isCopied ? 'Copied! 👍' : ''}
+      </span>
+      <style jsx>{`
+      span {
+        padding-left: 1rem;
+        color: #0070f3;
+      }
+      `}</style>
+    </>
+  )
+}
+
 export default () => {
   const { fromCopper, toCopper, toShortCurrencies } = useCurrency()
   const { party } = useParty()
@@ -104,6 +143,8 @@ export default () => {
     setResults(divideToString)
   }
 
+
+
   return (
     <div className="Results">
       <h3>Results</h3>
@@ -115,6 +156,7 @@ export default () => {
             <TreasureToAttributeList />
           </ul>
           <div className="share">
+            <CopyButton results={results} />
           </div>
         </div>
       }
@@ -134,7 +176,8 @@ export default () => {
       }
 
       .share {
-        margin-top: 1rem;
+        margin: 1rem 0;
+        padding-top: 1rem;
         border-top: 1px solid #eaeaea
       }
       `}</style>

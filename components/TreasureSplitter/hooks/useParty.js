@@ -17,10 +17,15 @@ const useParty = () => {
       setState(newState)
     }
 
+    function getPartyMemberById(id) {
+      return state.find(m => m.id === id)
+    }
+
     return {
       party: state,
       addPartyMember,
-      removePartyMember
+      removePartyMember,
+      getPartyMemberById
     }
 };
 

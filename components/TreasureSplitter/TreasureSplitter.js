@@ -58,6 +58,12 @@ export default () => (
           .panel:last-of-type {
             margin-right: 0;
           }
+
+          @media (prefers-color-scheme: dark) {
+            .TreasureSplitter {
+              border-color: #373737
+            }
+          }
         `}</style>
         </div>
       </PartyProvider>

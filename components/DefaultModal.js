@@ -1,4 +1,5 @@
 import ReactModal from 'react-modal';
+import useDarkMode from 'use-dark-mode'
 
 const DefaultModalStyle = {
   content: {
@@ -11,18 +12,30 @@ const DefaultModalStyle = {
     boxShadow: '0 2px 0 0 #ccc'
   }
 }
+const DarkModalStyle = {
+  content: {
+    ...DefaultModalStyle.content,
+    backgroundColor: "#222",
+    color: "#fff"
+  }
+}
+
 
 ReactModal.setAppElement("#__next")
-const DefaultModal = (props) => (
-  <ReactModal
-    isOpen
-    shouldCloseOnOverlayClick={true}
-    style={DefaultModalStyle}
-    {...props}
-  >
-    { props.children }
-  </ReactModal>
-)
+const DefaultModal = (props) => {
+  const darkMode = useDarkMode(false);
+
+  return (
+    <ReactModal
+      isOpen
+      shouldCloseOnOverlayClick={true}
+      style={darkMode ? DarkModalStyle : DefaultModalStyle}
+      {...props}
+    >
+      { props.children }
+    </ReactModal>
+  )
+}
 
 const DefaultModalFooter = (props) => (
   <footer>

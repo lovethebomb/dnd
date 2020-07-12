@@ -119,6 +119,14 @@ export default ({ currency, onChange, onToggle }) => {
         input::-webkit-inner-spin-button {
           margin-left: 0.2rem;
         }
+
+        @media (prefers-color-scheme: dark) {
+          input {
+            background-color: #393838;
+            color: #fff;
+            border: none;
+          }
+        }
       `}</style>
     </div>
   );

@@ -60,6 +60,14 @@ const useTreasureInput = () => {
             min-height: 38px;
             margin-left: 1rem;
           }
+
+          @media (prefers-color-scheme: dark) {
+            input {
+              background-color: #393838;
+              color: #fff;
+              border: none;
+            }
+          }
         `}</style>
       </>
     );

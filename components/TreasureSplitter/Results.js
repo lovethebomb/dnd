@@ -180,6 +180,13 @@ export default () => {
         padding-top: 1rem;
         border-top: 1px solid #eaeaea
       }
+
+      @media (prefers-color-scheme: dark) {
+        .results,
+        .share {
+          border-top-color: #373737
+        }
+      }
       `}</style>
     </div>
   )

@@ -1,26 +1,14 @@
-import CurrencyItem from './CurrencyItem'
-import useCurrency from './hooks/useCurrency'
+import dynamic from 'next/dynamic'
 
-const CurrencyList = () => {
-  const { currencies, updateCurrencyValue, toggleEnable } = useCurrency()
+const DynamicCurrencyList = dynamic(
+  () => import('./dynamic/CurrencyList.js'),
+  { ssr: false }
+)
 
-  return (
-    <form>
-    <ul>{ Object.keys(currencies).map(key => (
-      <CurrencyItem
-        key={currencies[key].name}
-        currency={currencies[key]}
-        onChange={(value) => updateCurrencyValue(key, value)}
-        onToggle={() => toggleEnable(key)}
-      />
-    ))}</ul>
-  </form>
-  )
-}
 
 const CurrencyBlock = () => (
   <>
-    <CurrencyList />
+    <DynamicCurrencyList />
   </>
 )
 export default CurrencyBlock

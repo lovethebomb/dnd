@@ -1,28 +1,13 @@
-import { useContext, useState } from 'react'
+import dynamic from 'next/dynamic'
 
 import useTreasure from './hooks/useTreasure'
 import useTreasureModal from './hooks/useTreasureModal';
 
 import ButtonAction from './ButtonAction'
 
-const TreasureList = ({ treasures, removeTreasure }) => (
-  <>{ treasures.map((treasure) => (
-    <p key={treasure.id}>
-      <span className="name">{treasure.name}</span>
-      <span className="delete" onClick={(e) => { removeTreasure(treasure) }}>❌</span>
-      <style jsx>{`
-      .delete {
-        margin-left: 1rem;
-        opacity: 0.2;
-      }
-
-      .delete:hover {
-        opacity: 1;
-        cursor: pointer;
-      }
-    `}</style>
-    </p>
-  ))}</>
+const DynamicTreasureList = dynamic(
+  () => import('./dynamic/TreasureList'),
+  { ssr: false }
 )
 
 const TreasureBlock = () => {
@@ -31,7 +16,7 @@ const TreasureBlock = () => {
 
   return (
     <ul>
-      <TreasureList treasures={treasures} removeTreasure={removeTreasure} />
+      <DynamicTreasureList treasures={treasures} removeTreasure={removeTreasure} />
       <li>
         <ButtonAction onClick={showModal}>Add Treasure</ButtonAction>
       </li>

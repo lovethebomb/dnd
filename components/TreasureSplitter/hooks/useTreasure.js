@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { TreasureContext } from "../context/TreasureContext";
+import { DEFAULT_TREASURES, TreasureContext } from "../context/TreasureContext";
 
 const useTreasure = () => {
   const [state, setState] = useContext(TreasureContext);
@@ -27,11 +27,16 @@ const useTreasure = () => {
       setState(newTreasures)
     }
 
+    function resetTreasure() {
+      setState(DEFAULT_TREASURES)
+    }
+
     return {
       treasures: state,
       addTreasure,
       removeTreasure,
-      setTreasureOwner
+      setTreasureOwner,
+      resetTreasure
     }
 };
 

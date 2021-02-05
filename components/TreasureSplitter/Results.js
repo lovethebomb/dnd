@@ -85,7 +85,8 @@ const CopyButton = ({ results }) => {
   const { treasures } = useTreasure()
 
   // TODO: use styling for copy
-  const treasureOwner = (treasure) => { return `${getPartyMemberById(treasure.ownedBy).name}` }
+  const treasureOwnerName = (treasure) => getPartyMemberById(treasure.ownedBy)?.name || false
+  const treasureOwner = (treasure) => { return treasureOwnerName(treasure) ?? 'Missing member' }
   const copyAsText = () => {
     const treasuresList = treasures.map(treasure =>
       `- ${treasure.name} ${treasure.ownedBy ? `for ${treasureOwner(treasure)}` : ''}`

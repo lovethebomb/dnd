@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import createPersistedState from 'use-persisted-state';
+
+const useCurrencyState = createPersistedState('currency');
 
 const DEFAULT_CURRENCY = {
   platinum: { name: 'Platinum', short: 'pp', value: 0, toCP: 1000, enabled: true },
@@ -11,7 +14,7 @@ const DEFAULT_CURRENCY = {
 const CurrencyContext = React.createContext([{}, () => {}]);
 
 const CurrencyProvider = (props) => {
-  const [state, setState] = useState(DEFAULT_CURRENCY);
+  const [state, setState] = useCurrencyState(DEFAULT_CURRENCY);
   return (
     <CurrencyContext.Provider value={[state, setState]}>
       {props.children}
@@ -19,4 +22,4 @@ const CurrencyProvider = (props) => {
   );
 };
 
-export { CurrencyContext, CurrencyProvider };
+export { DEFAULT_CURRENCY, CurrencyContext, CurrencyProvider };

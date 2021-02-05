@@ -13,6 +13,11 @@ export default function Home() {
         <h1 className="title">
           D&D Tools & Stuff
         </h1>
+        <a className="changes link" href="/changes#latest">
+          <span className="release">0.2</span>&nbsp;
+          <span className="sep">–</span>&nbsp;
+          Fixed Dark Mode, Add Local Save
+        </a>
 
         <div className="grid">
           <a href="/splitter" className="card">

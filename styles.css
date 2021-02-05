@@ -170,6 +170,19 @@ ul {
   background-color: #0455b3;
 }
 
+.btn-danger {
+  background-color: #f30000;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: #ff4444;
+}
+
+.btn-danger:active {
+  background-color: #ca0000;
+}
+
 .btn[disabled],
 .btn[disalbed]:active,
 .btn[disalbed]:hover {
@@ -179,6 +192,10 @@ ul {
 }
 
 @media (max-width: 640px) {
+  main {
+    width: 100%;
+  }
+
   .grid {
     width: 100%;
     flex-direction: column;

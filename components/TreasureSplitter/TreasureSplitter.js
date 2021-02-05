@@ -45,7 +45,7 @@ const Content = () => {
           <Results />
         </div>
       </div>
-      <button className="btn btn-primary" onClick={resetSplitter}>Reset all</button>
+      <button className="reset btn btn-danger" onClick={resetSplitter}>Reset all</button>
       <style jsx>{`
       .TreasureSplitter {
         margin: 1rem;
@@ -81,6 +81,20 @@ const Content = () => {
 
       .panel:last-of-type {
         margin-right: 0;
+      }
+
+      .reset {
+        margin-top: 2rem;
+      }
+
+      @media (max-width: 640px) {
+        .TreasureSplitter {
+          width: 100%;
+        }
+
+        .content {
+          display: block;
+        }
       }
 
       @media (prefers-color-scheme: dark) {

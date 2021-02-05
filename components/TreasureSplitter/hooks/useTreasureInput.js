@@ -61,6 +61,12 @@ const useTreasureInput = () => {
             margin-left: 1rem;
           }
 
+          @media (max-width: 640px) {
+            input {
+              min-width: 0
+            }
+          }
+
           @media (prefers-color-scheme: dark) {
             input {
               background-color: #393838;

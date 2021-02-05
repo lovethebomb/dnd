@@ -18,8 +18,9 @@ const CurrencyList = () => {
   )
 }
 
-export default () => (
+const CurrencyBlock = () => (
   <>
     <CurrencyList />
   </>
 )
+export default CurrencyBlock

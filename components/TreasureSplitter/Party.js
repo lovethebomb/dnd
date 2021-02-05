@@ -29,7 +29,7 @@ const PartyList = () => {
 }
 
 
-export default () => {
+const Party = () => {
   const { showModal } = usePartyMemberModal();
 
   return (
@@ -49,4 +49,7 @@ export default () => {
       `}</style>
     </div>
   );
-}
+};
+
+
+export default Party;

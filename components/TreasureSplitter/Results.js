@@ -117,7 +117,7 @@ const CopyButton = ({ results }) => {
   )
 }
 
-export default () => {
+const Results = () => {
   const { fromCopper, toCopper, toShortCurrencies } = useCurrency()
   const { party } = useParty()
   const [results, setResults ] = useState("")
@@ -190,4 +190,6 @@ export default () => {
       `}</style>
     </div>
   )
-}
+};
+
+export default Results;

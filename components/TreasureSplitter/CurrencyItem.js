@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 
-export default ({ currency, onChange, onToggle }) => {
+const CurrencyItem = ({ currency, onChange, onToggle }) => {
   const [inputVisible, setInputVisible] = useState(false)
   const inputEl = useRef(null);
 
@@ -130,4 +130,6 @@ export default ({ currency, onChange, onToggle }) => {
       `}</style>
     </div>
   );
-}
+};
+
+export default CurrencyItem;

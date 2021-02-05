@@ -25,7 +25,7 @@ const TreasureList = ({ treasures, removeTreasure }) => (
   ))}</>
 )
 
-export default () => {
+const TreasureBlock = () => {
   const { treasures, removeTreasure } = useTreasure();
   const { showModal } = useTreasureModal();
 
@@ -37,4 +37,6 @@ export default () => {
       </li>
     </ul>
   )
-}
+};
+
+export default TreasureBlock;

@@ -1,4 +1,4 @@
-export default ({ icon, size="38" }) => (
+const PartyMemberIcon = ({ icon, size="38" }) => (
   <>
     <img className="icon"
       src={icon ? icon : '/img/default-avatar.png'}
@@ -12,3 +12,5 @@ export default ({ icon, size="38" }) => (
     `}</style>
   </>
 )
+
+export default PartyMemberIcon

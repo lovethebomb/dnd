@@ -18,6 +18,8 @@
     "react-modal": "^3.12.1",
     "react-modal-hook": "^3.0.0",
     "react-use-clipboard": "^1.0.7",
+    "remark": "^13.0.0",
+    "remark-html": "^13.0.1",
     "shortid": "^2.2.16",
     "use-dark-mode": "^2.3.1"
   }

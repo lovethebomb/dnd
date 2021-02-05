@@ -1,5 +1,5 @@
 import ReactModal from 'react-modal';
-import useDarkMode from 'use-dark-mode'
+import useDarkMode from './hooks/useDarkMode';
 
 const DefaultModalStyle = {
   content: {
@@ -23,13 +23,13 @@ const DarkModalStyle = {
 
 ReactModal.setAppElement("#__next")
 const DefaultModal = (props) => {
-  const darkMode = useDarkMode(false);
+  const { darkMode } = useDarkMode();
 
   return (
     <ReactModal
       isOpen
       shouldCloseOnOverlayClick={true}
-      style={darkMode ? DarkModalStyle : DefaultModalStyle}
+      style={darkMode.value ? DarkModalStyle : DefaultModalStyle}
       {...props}
     >
       { props.children }

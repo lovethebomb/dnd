@@ -54,6 +54,19 @@ a {
   font-size: 4rem;
 }
 
+.changes {
+  font-family: monospace;
+  color: #0070f3
+}
+
+.changes .release {
+  font-weight: bold;
+}
+
+.changes .sep {
+  font-weight: bold;
+}
+
 .title,
 .description {
   text-align: center;
@@ -165,10 +178,19 @@ ul {
   cursor: not-allowed;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 640px) {
   .grid {
     width: 100%;
     flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
+  .card {
+    width: 100%;
+  }
+
+  .title {
+    font-size: 3rem;
   }
 }
 
@@ -179,3 +201,4 @@ ul {
     color: #fff;
   }
 }
+

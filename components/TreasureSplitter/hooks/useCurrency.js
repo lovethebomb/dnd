@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { CurrencyContext } from "../context/CurrencyContext";
+import { DEFAULT_CURRENCY, CurrencyContext } from "../context/CurrencyContext";
 
 const useCurrency = () => {
   const [state, setState] = useContext(CurrencyContext);
@@ -44,13 +44,18 @@ const useCurrency = () => {
       return coins;
     }
 
+    function resetCurrency() {
+      setState(DEFAULT_CURRENCY)
+    }
+
     return {
       currencies: state,
       fromCopper,
       toShortCurrencies,
       toCopper,
       toggleEnable,
-      updateCurrencyValue
+      updateCurrencyValue,
+      resetCurrency
     }
 };
 

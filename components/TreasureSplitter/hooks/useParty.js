@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { PartyContext } from "../context/PartyContext";
+import { DEFAULT_PARTY, PartyContext } from "../context/PartyContext";
 
 const useParty = () => {
   const [state, setState] = useContext(PartyContext);
@@ -21,11 +21,16 @@ const useParty = () => {
       return state.find(m => m.id === id)
     }
 
+    function resetParty() {
+      setState(DEFAULT_PARTY)
+    }
+
     return {
       party: state,
       addPartyMember,
       removePartyMember,
-      getPartyMemberById
+      getPartyMemberById,
+      resetParty
     }
 };
 

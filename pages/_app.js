@@ -7,6 +7,7 @@ import { ModalProvider } from 'react-modal-hook';
 import { DarkModeProvider } from '../components/context/DarkModeContext'
 
 import '../styles.css'
+import '../components/calendar/calendar.css';
 
 // This default export is required in a new `pages/_app.js` file.
 export default function Application({ Component, pageProps }) {

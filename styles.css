@@ -191,6 +191,11 @@ ul {
   cursor: not-allowed;
 }
 
+
+.page-calendar {
+  padding: 1rem;
+}
+
 @media (max-width: 640px) {
   main {
     width: 100%;

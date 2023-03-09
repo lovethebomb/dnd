@@ -1,0 +1,151 @@
+
+.calendar {
+  width: 80vw;
+  background: #f2f2f2;
+  color: #222;
+  border-radius: 8px;
+
+  --color-event: #ffa1e6;
+  --color-hover: #2196f3;
+  --color-day: #f2f2f2;
+  --color-today: #dbeef5;
+  --color-disabled: #e0e0e0;
+  --color-selected: #cddc39;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2.5% 1%;
+}
+
+.calendar-prev,
+.calendar-next,
+.calendar-current {
+  cursor: pointer;
+
+}
+
+.calendar-prev:hover,
+.calendar-next:hover {
+  color: var(--color-hover);
+}
+
+.calendar-days {
+  display: flex;
+  align-items: center;
+}
+
+.calendar-day {
+  width: calc((100% / 7));
+  padding: 0.5% 1%;
+  background-color: var(--color-day);
+  font-weight: bold;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 0.5rem 0.3rem;
+}
+
+.calendar-cells {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.calendar-cell {
+  width: calc((100% / 7));
+  height: 0;
+  padding-bottom: calc((100% / 7));
+}
+
+.calendar-cell:last-of-type {
+border-bottom-right-radius: 8px;
+}
+
+.calendar-cell--disabled {
+  opacity: 0.5;
+  background-color: var(--color-disabled);
+}
+
+.calendar-cell[data-selected~="true"] {
+  background-color: var(--color-selected);
+}
+
+.calendar-cell--today {
+  background-color: var(--color-today);
+}
+
+.calendar-cell__date {
+  padding: 5%;
+  margin-bottom: 5px;
+  user-select: none;
+}
+
+.calendar-event {
+  background-color: var(--color-event);
+  padding: 5px;
+  margin-bottom: 2px;
+  font-size: 12px;
+  user-select: none;
+}
+.calendar-event.calendar-event--player {
+  background-color: var(--color-player);
+}
+
+.calendar-form {
+  display: flex;
+  padding: 1rem;
+  justify-content: center;
+  align-items: center;
+
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.calendar-form > div {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(12px);
+  -webkit-mask-image: linear-gradient(to bottom,black var(--header-height),transparent);
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #5d5d5d0d;
+}
+
+.calendar-form select {
+  font-size: 1rem;
+  padding: 1rem 0.8rem;
+}
+
+.calendar-form button {
+  font-size: 1rem;
+  padding: 1rem 1.2rem;
+  background: #cddc39;
+  border: 1px solid #8bc34a;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.calendar-form-color-player {
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid #fefefe;
+  border-radius: 2px;
+  background-color: var(--color-player);
+}
+
+.calendar-form-success {
+  visibility: hidden;
+  opacity: 0.001;
+  color: #4caf50;
+  transition: visibility 0s 1s, opacity .25s linear;
+}
+
+.calendar-form[data-saved~="true"] .calendar-form-success{
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0s linear;
+}

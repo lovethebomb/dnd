@@ -123,11 +123,24 @@ border-bottom-right-radius: 8px;
 .calendar-form button {
   font-size: 1rem;
   padding: 1rem 1.2rem;
-  background: #cddc39;
-  border: 1px solid #8bc34a;
   border-radius: 3px;
   cursor: pointer;
 }
+
+.calendar-form-add {
+  background: #cddc39;
+  border: 1px solid #8bc34a;
+}
+
+.calendar-form-delete {
+  border: 1px solid #f6736a;
+  background: #f44336;
+}
+
+.calendar-form-delete:not(:disabled) {
+color: #fff;
+}
+
 
 .calendar-form-color-player {
   width: 2rem;

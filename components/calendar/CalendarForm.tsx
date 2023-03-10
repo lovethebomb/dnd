@@ -1,59 +1,128 @@
 import React, { useState } from "react";
 import { useCalendar } from "./CalendarContext";
-import { supabase } from "../../lib/supabaseClient";
-import { PLAYER_COLORS } from "../../lib/players";
+import { Player, PLAYER_COLORS } from "../../lib/players";
 
 const DURATION_SAVED = 3000;
 
 const CalendarForm: React.FunctionComponent = () => {
-  const { weekStartsOn, currentMonth, selectedDates, selectedPlayer, setSelectedPlayer, updateEvents } = useCalendar();
-  // const [playerName, setPlayerName] = useState("-1");
+  const {
+    events,
+    selectedDates,
+    selectedPlayer,
+    setSelectedPlayer,
+    updateEvents,
+    eventsForPlayer,
+    selectedEvents,
+    updateDates,
+  } = useCalendar();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasSaved, setHasSaved] = useState(false);
 
-  let canSubmit = !isSubmitting && selectedPlayer !== "";
+  let canAdd =
+    !isSubmitting && selectedPlayer !== "" && selectedDates.current.size > 0;
+  let canDelete =
+    !isSubmitting &&
+    selectedPlayer !== "" &&
+    selectedEvents.current.size > 0 &&
+    selectedDates.current.size === selectedEvents.current.size;
 
-  async function submitForm(e) {
-    e.preventDefault();
+  function validate() {
     if (isSubmitting) {
-      return;
+      return false;
     }
 
-    setIsSubmitting(true);
-    const formData = new FormData(e.target);
-    const player = formData.get("player");
-    if (player === "" || typeof player === null) {
-      setIsSubmitting(false);
-      return;
+    if (selectedPlayer === "" || typeof selectedPlayer === null) {
+      return false;
     }
+
     if (!selectedDates || !selectedDates.current) {
-      return;
+      return false;
     }
-    console.debug("submitForm:", {
-      player,
-      toSubmit: selectedDates.current.size,
-    });
-    const datesArray = Array.from(selectedDates.current)
-    const { data, error } = await supabase
-      .from("player_dates")
-      .upsert(
-        {
-          player,
-          availability: { datesArray },
-        },
-        { onConflict: "player" }
-      )
-      .select();
-      updateEvents(player as string,  datesArray)
+    return true;
+  }
+
+  async function handleSubmit(player: Player, dates: string[]) {
+    // FIXME: do we really need sorting? its just nicer
+    dates.sort();
+
+    const { data, error } = await updateDates(player, dates);
+    updateEvents(player as string, dates);
 
     setIsSubmitting(false);
     setHasSaved(true);
-    console.debug("supabase complete", { data, error });
+    console.debug("[handleSubmit] complete", { data, error });
 
     setTimeout(() => {
       setHasSaved(false);
     }, DURATION_SAVED);
   }
+
+  async function addDates(e) {
+    console.debug("[addDates] start");
+    e.preventDefault();
+
+    if (!validate) {
+      setIsSubmitting(false);
+      setHasSaved(false);
+    }
+
+    setIsSubmitting(true);
+
+    const cloneSelectedDates = new Set(selectedDates.current);
+    events.forEach((event) => {
+      if (event.type === "player" && event.name === selectedPlayer) {
+        cloneSelectedDates.add(event.dateString);
+      }
+    });
+
+    console.debug("[addDates] submit", {
+      player: selectedPlayer,
+      toSubmit: cloneSelectedDates,
+    });
+
+    const datesArray = Array.from(cloneSelectedDates);
+    try {
+      return handleSubmit(selectedPlayer, datesArray);
+    } catch (e) {
+      setIsSubmitting(false);
+      setHasSaved(false);
+    }
+  }
+
+  async function deleteDates(e) {
+    console.debug("[deleteDates] start");
+    e.preventDefault();
+
+    if (!validate) {
+      setIsSubmitting(false);
+      setHasSaved(false);
+    }
+
+    setIsSubmitting(true);
+
+    // copy all original events
+    const cloneEventsForPlayer = new Set(eventsForPlayer.current);
+
+    console.debug("selectedEvents", cloneEventsForPlayer);
+
+    Array.from(selectedEvents.current).forEach((event) => {
+      cloneEventsForPlayer.delete(event);
+    });
+
+    console.debug("[deleteDates] submit", {
+      selectedPlayer,
+      toSubmit: cloneEventsForPlayer,
+    });
+    const datesArray = Array.from(cloneEventsForPlayer);
+
+    try {
+      return handleSubmit(selectedPlayer, datesArray);
+    } catch (e) {
+      setIsSubmitting(false);
+      setHasSaved(false);
+    }
+  }
+
   const playerColorStyle = {
     "--color-player": PLAYER_COLORS[selectedPlayer],
   } as React.CSSProperties;
@@ -63,7 +132,7 @@ const CalendarForm: React.FunctionComponent = () => {
       className="calendar-form"
       data-submitting={isSubmitting}
       data-saved={hasSaved}
-      onSubmit={submitForm}
+      onSubmit={addDates}
     >
       <div>
         <span
@@ -81,7 +150,16 @@ const CalendarForm: React.FunctionComponent = () => {
           <option value="Sharinn">Sharinn</option>
           <option value="Zerakos">Zerakos</option>
         </select>
-        <button disabled={!canSubmit}>Save Dates</button>
+        <button type="submit" className="calendar-form-add" disabled={!canAdd}>
+          Add
+        </button>
+        <button
+          onClick={deleteDates}
+          className="calendar-form-delete"
+          disabled={!canDelete}
+        >
+          Delete
+        </button>
         <span className="calendar-form-success">Saved!</span>
       </div>
     </form>

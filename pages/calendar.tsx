@@ -49,7 +49,7 @@ const CalendarPage = ({ playerDates }) => {
 
 export default CalendarPage
 
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
   let { data } = await supabase.from('player_dates').select()
 
   return {

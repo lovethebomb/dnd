@@ -2,6 +2,7 @@ import React, { MouseEventHandler, useCallback } from "react";
 import { isSameDay, isSameMonth, isToday, format } from "date-fns";
 import { useCalendar } from "./CalendarContext";
 import CalendarEvent from "./CalendarEvent";
+import { sortyByPlayerName } from "../../lib/players";
 
 type Props = {
   date: Date;
@@ -19,6 +20,9 @@ const CalendarCell: React.FunctionComponent<Props> = ({ date }) => {
   } = useCalendar();
 
   if (!currentMonth || !setSelectedDate) return null;
+  // const todayEvents = events.filter((event) => isSameDay(date, event.date))
+  const todayEvents = [...events.filter((event) => isSameDay(date, event.date))]
+  todayEvents.sort(sortyByPlayerName)
 
   const dateString = format(date, "yyyyMMdd");
 
@@ -55,9 +59,8 @@ const CalendarCell: React.FunctionComponent<Props> = ({ date }) => {
       }
     >
       <div className="calendar-cell__date">{format(date, "d")}</div>
-      {events &&
-        events
-          .filter((event) => isSameDay(date, event.date))
+      {todayEvents &&
+        todayEvents
           .map((event) => (
             <CalendarEvent
               key={`${event.name}-${format(event.date, "T")}`}

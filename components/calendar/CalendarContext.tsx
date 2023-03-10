@@ -1,9 +1,4 @@
-import React, {
-  MutableRefObject,
-  useContext,
-  useRef,
-  useState,
-} from "react";
+import React, { MutableRefObject, useContext, useRef, useState } from "react";
 import { addMonths, isLastDayOfMonth, subMonths, format } from "date-fns";
 import { CalendarEvent, CalendarWeekStartsOn } from "./Calendar";
 import { convertToDate, Player } from "../../lib/players";
@@ -14,23 +9,32 @@ type CalendarContextType = {
   currentMonth: Date;
   setCurrentMonth: (date: Date) => void;
   selectedDate: Date;
-  setSelectedDate: (date: Date) => void;
-  selectedPlayer: Player,
-  setSelectedPlayer: (player: Player) => void,
-  selectedDates: MutableRefObject<Set<string>>;
   prevMonth: () => void;
   nextMonth: () => void;
+  // Player
   isSelecting: boolean;
-  updateEvents: (player: Player, dates: string[]) => void,
+  selectedPlayer: Player;
+  setSelectedPlayer: (player: Player) => void;
+  setSelectedDate: (date: Date) => void;
+  selectedDates: MutableRefObject<Set<string>>;
+  eventsForPlayer: MutableRefObject<Set<string>>;
+  selectedEvents: MutableRefObject<Set<string>>;
+  // Touch Events
   handleStart: (
     e: React.MouseEvent<HTMLDivElement>,
     dateString: string
   ) => void;
   handleMove: (e: React.MouseEvent<HTMLDivElement>, dateString: string) => void;
   handleEnd: (e: React.MouseEvent<HTMLDivElement>, dateString: string) => void;
+  // Logic
+  updateEvents: (player: Player, dates: string[]) => void;
+  updateDates: (player: Player, dates: string[]) => Promise<{ data: { [x: string]: any; }[]; error: PostgrestError; }>
 };
 
 const CalendarContext = React.createContext<Partial<CalendarContextType>>({});
+
+import { supabase } from "../../lib/supabaseClient";
+import { PostgrestError } from "@supabase/supabase-js";
 
 export const useCalendar = () => useContext(CalendarContext);
 
@@ -48,24 +52,26 @@ export const CalendarProvider: React.FunctionComponent<
   const [selectedDate, setSelectedDate] = useState<Date>();
   const selectedDates = useRef<Set<string>>(new Set());
   const isSelecting = useRef(false);
-  const [_, setForceRender] = useState(false)
+  const [_, setForceRender] = useState(false);
 
   const [selectedPlayer, setSelectedPlayer] = useState<Player>("");
+  const eventsForPlayer = useRef<Set<string>>(new Set());
+  const selectedEvents = useRef<Set<string>>(new Set());
   const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
   const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
 
   console.debug("[provider] render");
   let firstTarget = null;
   let lastMoveTarget = null;
-  const canSelectDates = selectedPlayer && selectedPlayer !== ""
+  const canSelectDates = true;
 
-  // Methods
+  // Touch events
   function handleStart(
     e: React.MouseEvent<HTMLDivElement>,
     dateString: string
   ) {
     if (!canSelectDates) {
-      return
+      return;
     }
 
     isSelecting.current = true;
@@ -78,7 +84,6 @@ export const CalendarProvider: React.FunctionComponent<
       selectedDates.current.add(dateString);
       e.currentTarget.setAttribute("data-selected", "true");
     }
-    // setForceRender((prev) => !prev)
   }
 
   function handleMove(e: React.MouseEvent<HTMLDivElement>, dateString: string) {
@@ -101,7 +106,6 @@ export const CalendarProvider: React.FunctionComponent<
       selectedDates.current.add(dateString);
       e.currentTarget.setAttribute("data-selected", "true");
     }
-    // setForceRender((prev) => !prev)
   }
 
   function handleEnd(e: React.MouseEvent<HTMLDivElement>, dateString: string) {
@@ -113,32 +117,84 @@ export const CalendarProvider: React.FunctionComponent<
     firstTarget = null;
     lastMoveTarget = null;
     console.debug("selected dates", selectedDates);
+    updateSelectedEvents(selectedPlayer);
   }
 
+  // Select Player
   function handleSetSelectedPlayer(player: Player) {
-    setSelectedPlayer(player)
-    // Convert events to selectedDates
-    const eventsForPlayer = events.filter(event => event.type === "player" && event.name === player)
-    console.debug('all events for player', { player, eventsForPlayer })
-    console.debug('selectedDates', selectedDates.current)
-    selectedDates.current.clear()
-    console.debug('selectedDates after clear', selectedDates.current)
-    // selectedDates.current = new Set(eventsForPlayer.map(event => event.dateString))
-    console.debug('selectedDates events', selectedDates.current)
-    // setForceRender((prev) => !prev)
+    console.debug("handleSetSelectedPlayer", player);
+    setSelectedPlayer(player);
+    updateSelectedEvents(player);
+  }
+
+
+  // Events
+  function updateSelectedEvents(player: Player) {
+    const eventsForPlayerFilter = calendarEvents.filter(
+      (event) => event.type === "player" && event.name === player
+    );
+    const dateStrings = eventsForPlayerFilter.map((event) => event.dateString);
+    eventsForPlayer.current = new Set(dateStrings);
+    selectedEvents.current = new Set(
+      dateStrings.filter((dateString) => selectedDates.current.has(dateString))
+    );
+    console.debug("updateSelectedEvents", {
+      selectedPlayer,
+      eventsForPlayerFilter: eventsForPlayerFilter.length,
+      dateStrings,
+      selectedEvents,
+      eventsForPlayer,
+      selectedDates: selectedDates.current.size,
+    });
+    // TODO: Optimize re-render
+    setForceRender((prev) => !prev);
   }
 
   function updateEvents(player: Player, dates: string[]) {
-    console.debug('updateEvents', player, dates)
-    // Update events list with the new selectedDates
-    const eventsWithoutPlayer = events.filter(event => event.type !== "player" || (event.type === "player" && event.name !== player))
-    dates.forEach(playerDate => {
-      const { date, dateString } = convertToDate(playerDate)
-      eventsWithoutPlayer.push({ date, dateString, name: player, type: "player" })
-    })
+    console.debug("updateEvents", player, dates);
 
-    setEvents(eventsWithoutPlayer)
-    console.debug('updateEvents', { eventsWithoutPlayer })
+    // Cleanup selectedDates
+    selectedDates.current.clear();
+
+    // Update events list with the new selectedDates
+    const eventsWithoutPlayer = [
+      ...calendarEvents.filter(
+        (event) =>
+          event.type !== "player" ||
+          (event.type === "player" && event.name !== player)
+      ),
+    ];
+    dates.forEach((playerDate) => {
+      const { date, dateString } = convertToDate(playerDate);
+      eventsWithoutPlayer.push({
+        date,
+        dateString,
+        name: player,
+        type: "player",
+      });
+    });
+
+    setEvents(eventsWithoutPlayer);
+    console.debug("updateEvents", { eventsWithoutPlayer });
+  }
+
+  // Database
+  async function updateDates(player, dates) {
+    const { data, error } = await supabase
+      .from("player_dates")
+      .upsert(
+        {
+          player,
+          availability: { datesArray: dates },
+        },
+        { onConflict: "player" }
+      )
+      .select();
+
+    return {
+      data,
+      error,
+    };
   }
 
   return (
@@ -152,13 +208,19 @@ export const CalendarProvider: React.FunctionComponent<
         setSelectedDate,
         prevMonth,
         nextMonth,
+        // Player
         selectedPlayer,
         setSelectedPlayer: handleSetSelectedPlayer,
+        eventsForPlayer,
         selectedDates,
+        selectedEvents,
+        // Touch events
         handleStart,
         handleMove,
         handleEnd,
-        updateEvents
+        // Logic
+        updateEvents,
+        updateDates,
       }}
     >
       {children}

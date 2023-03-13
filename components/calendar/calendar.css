@@ -1,6 +1,8 @@
 
 .calendar {
-  width: 80vw;
+  width: auto;
+  width: 90vw;
+  max-width: 70rem;
   background: #f2f2f2;
   color: #222;
   border-radius: 8px;
@@ -82,8 +84,8 @@ border-bottom-right-radius: 8px;
 
 .calendar-event {
   background-color: var(--color-event);
-  padding: 5px;
-  margin-bottom: 2px;
+  padding: 4px;
+  margin-bottom: 0px;
   font-size: 12px;
   user-select: none;
 }

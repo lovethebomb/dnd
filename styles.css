@@ -194,6 +194,7 @@ ul {
 
 .page-calendar {
   padding: 1rem;
+  display: block;
 }
 
 @media (max-width: 640px) {

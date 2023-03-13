@@ -6,7 +6,8 @@ const DURATION_SAVED = 3000;
 
 const CalendarForm: React.FunctionComponent = () => {
   const {
-    events,
+    localEvents,
+    calendarEvents,
     selectedDates,
     selectedPlayer,
     setSelectedPlayer,
@@ -69,7 +70,7 @@ const CalendarForm: React.FunctionComponent = () => {
     setIsSubmitting(true);
 
     const cloneSelectedDates = new Set(selectedDates.current);
-    events.forEach((event) => {
+    calendarEvents.forEach((event) => {
       if (event.type === "player" && event.name === selectedPlayer) {
         cloneSelectedDates.add(event.dateString);
       }
@@ -145,6 +146,7 @@ const CalendarForm: React.FunctionComponent = () => {
           onChange={(e) => setSelectedPlayer(e.target.value)}
         >
           <option value="">Choose player to update...</option>
+          <option value="Droop">Droop</option>
           <option value="Nesji">Nesji</option>
           <option value="Xendar">Xendar</option>
           <option value="Sharinn">Sharinn</option>

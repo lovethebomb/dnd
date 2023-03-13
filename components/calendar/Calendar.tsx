@@ -15,16 +15,16 @@ export type CalendarEvent = {
 export type CalendarWeekStartsOn = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
 export type CalendarProps = {
-  events: CalendarEvent[];
+  localEvents: CalendarEvent[];
   weekStartsOn?: CalendarWeekStartsOn;
 };
 
 const Calendar: React.FunctionComponent<CalendarProps> = ({
-  events,
+  localEvents,
   weekStartsOn = 1,
 }) => (
   <div className="calendar">
-    <CalendarProvider events={events} weekStartsOn={weekStartsOn}>
+    <CalendarProvider localEvents={localEvents} weekStartsOn={weekStartsOn}>
       <CalendarHeader />
       <CalendarDays />
       <CalendarCells />

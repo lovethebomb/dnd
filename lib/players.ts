@@ -1,5 +1,5 @@
 export const PLAYER_COLORS = {
-  Droop: "#f2f2f2",
+  Droop: "#7affc7",
   Nesji: "#ffc107",
   Xendar: "#03a9f4",
   Sharinn: "#4caf50",
@@ -31,6 +31,20 @@ export function transformAvailibility(availability: Availability | null) {
   }
 
   return availability.datesArray.map(convertToDate);
+}
+
+export function transformChangeAvailibility(availability: Availability | null) {
+  if (!availability) {
+    return [];
+  }
+  if (availability && !availability.datesArray) {
+    return [];
+  }
+  if (availability && availability.datesArray.length < 1) {
+    return [];
+  }
+
+  return availability.datesArray
 }
 
 export function sortyByPlayerName(a, b) {

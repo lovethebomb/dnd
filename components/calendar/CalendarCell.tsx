@@ -10,7 +10,8 @@ type Props = {
 
 const CalendarCell: React.FunctionComponent<Props> = ({ date }) => {
   const {
-    events,
+    localEvents,
+    calendarEvents,
     currentMonth,
     setSelectedDate,
     handleStart,
@@ -21,8 +22,10 @@ const CalendarCell: React.FunctionComponent<Props> = ({ date }) => {
 
   if (!currentMonth || !setSelectedDate) return null;
   // const todayEvents = events.filter((event) => isSameDay(date, event.date))
-  const todayEvents = [...events.filter((event) => isSameDay(date, event.date))]
-  todayEvents.sort(sortyByPlayerName)
+  const todayLocalEvents = [...localEvents.filter((event) => isSameDay(date, event.date))]
+  const todayPlayerEvents = [...calendarEvents.filter((event) => isSameDay(date, event.date))]
+  todayPlayerEvents.sort(sortyByPlayerName)
+  const todayEvents = todayLocalEvents.concat(todayPlayerEvents)
 
   const dateString = format(date, "yyyyMMdd");
 

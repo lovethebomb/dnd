@@ -1,10 +1,22 @@
-import React, { MutableRefObject, useContext, useRef, useState } from "react";
-import { addMonths, isLastDayOfMonth, subMonths, format } from "date-fns";
+import React, {
+  MutableRefObject,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { addMonths, isLastDayOfMonth, subMonths, format, sub } from "date-fns";
 import { CalendarEvent, CalendarWeekStartsOn } from "./Calendar";
-import { convertToDate, Player } from "../../lib/players";
+import {
+  convertToDate,
+  Player,
+  transformAvailibility,
+  transformChangeAvailibility,
+} from "../../lib/players";
 
 type CalendarContextType = {
-  events: CalendarEvent[];
+  localEvents: CalendarEvent[];
+  calendarEvents: CalendarEvent[];
   weekStartsOn: CalendarWeekStartsOn;
   currentMonth: Date;
   setCurrentMonth: (date: Date) => void;
@@ -28,7 +40,10 @@ type CalendarContextType = {
   handleEnd: (e: React.MouseEvent<HTMLDivElement>, dateString: string) => void;
   // Logic
   updateEvents: (player: Player, dates: string[]) => void;
-  updateDates: (player: Player, dates: string[]) => Promise<{ data: { [x: string]: any; }[]; error: PostgrestError; }>
+  updateDates: (
+    player: Player,
+    dates: string[]
+  ) => Promise<{ data: { [x: string]: any }[]; error: PostgrestError }>;
 };
 
 const CalendarContext = React.createContext<Partial<CalendarContextType>>({});
@@ -40,14 +55,14 @@ export const useCalendar = () => useContext(CalendarContext);
 
 type CalendarProviderProps = {
   children: React.ReactNode;
-  events: CalendarEvent[];
+  localEvents: CalendarEvent[];
   weekStartsOn: CalendarWeekStartsOn;
 };
 
 export const CalendarProvider: React.FunctionComponent<
   CalendarProviderProps
-> = ({ children, events, weekStartsOn }) => {
-  const [calendarEvents, setEvents] = useState(events);
+> = ({ children, localEvents, weekStartsOn }) => {
+  const [calendarEvents, setEvents] = useState([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date>();
   const selectedDates = useRef<Set<string>>(new Set());
@@ -59,8 +74,23 @@ export const CalendarProvider: React.FunctionComponent<
   const selectedEvents = useRef<Set<string>>(new Set());
   const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
   const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
+  const [loadingInitial, setLoadingInitial] = useState(true)
 
-  console.debug("[provider] render");
+
+  let subscription = null;
+  useEffect(() => {
+    getInitialEvents();
+
+    return () => {
+      subscription.unsubscribe();
+      console.log(
+        "Remove supabase subscription by useEffect unmount",
+        subscription
+      );
+    };
+  }, []);
+
+  console.debug("[provider] render", subscription, calendarEvents, localEvents);
   let firstTarget = null;
   let lastMoveTarget = null;
   const canSelectDates = true;
@@ -116,7 +146,6 @@ export const CalendarProvider: React.FunctionComponent<
     isSelecting.current = false;
     firstTarget = null;
     lastMoveTarget = null;
-    console.debug("selected dates", selectedDates);
     updateSelectedEvents(selectedPlayer);
   }
 
@@ -127,13 +156,18 @@ export const CalendarProvider: React.FunctionComponent<
     updateSelectedEvents(player);
   }
 
-
   // Events
+
   function updateSelectedEvents(player: Player) {
     const eventsForPlayerFilter = calendarEvents.filter(
       (event) => event.type === "player" && event.name === player
     );
+    console.debug(
+      "[updateSelectedEvents] eventsForPlayerFilter",
+      eventsForPlayerFilter
+    );
     const dateStrings = eventsForPlayerFilter.map((event) => event.dateString);
+    console.debug("[updateSelectedEvents] dateStrings", dateStrings);
     eventsForPlayer.current = new Set(dateStrings);
     selectedEvents.current = new Set(
       dateStrings.filter((dateString) => selectedDates.current.has(dateString))
@@ -176,9 +210,95 @@ export const CalendarProvider: React.FunctionComponent<
 
     setEvents(eventsWithoutPlayer);
     console.debug("updateEvents", { eventsWithoutPlayer });
+    updateSelectedEvents(player);
   }
 
   // Database
+  const onSubscriptionChange = (payload) => {
+    setEvents((previousEvents) => {
+      const player = payload.new.player;
+      const newEvents = transformChangeAvailibility(payload.new.availability);
+      console.debug("onSubscriptionChange", {
+        previousEvents,
+        player,
+        newEvents,
+      });
+
+      // Cleanup selectedDates
+      // selectedDates.current.clear();
+
+      const eventsWithoutPlayer = [
+        ...previousEvents.filter(
+          (event) =>
+            event.type !== "player" ||
+            (event.type === "player" && event.name !== player)
+        ),
+      ];
+      newEvents.forEach((playerDate) => {
+        const { date, dateString } = convertToDate(playerDate);
+        eventsWithoutPlayer.push({
+          date,
+          dateString,
+          name: player,
+          type: "player",
+        });
+      });
+
+      return eventsWithoutPlayer;
+    });
+  }
+
+  const fetchInitialEvents = async () => {
+    if (!calendarEvents.length) {
+      let { data, error } = await supabase.from("player_dates").select();
+
+      if (error) {
+        // TODO:
+        console.error("[supabase] could not load initial events");
+      }
+
+      let transformedPlayerDates = data.map((entry) => ({
+        player: entry.player,
+        events: transformAvailibility(entry.availability),
+      }));
+      let events = [];
+      for (let playerDate of transformedPlayerDates) {
+        playerDate.events.forEach((item) => {
+          events.push({
+            date: item.date,
+            dateString: item.dateString,
+            name: playerDate.player,
+            type: "player",
+          });
+        });
+      }
+      setEvents(state => {
+        state = events
+        return events
+      });
+    }
+  }
+
+  const getInitialEvents = async () => {
+    if (!subscription) {
+      fetchInitialEvents()
+      subscription = supabase
+        .channel("table-db-changes")
+        .on(
+          "postgres_changes",
+          {
+            event: "UPDATE",
+            schema: "public",
+            table: "player_dates",
+          },
+          (payload) => {
+            onSubscriptionChange(payload);
+          }
+        )
+        .subscribe();
+    }
+  };
+
   async function updateDates(player, dates) {
     const { data, error } = await supabase
       .from("player_dates")
@@ -197,10 +317,13 @@ export const CalendarProvider: React.FunctionComponent<
     };
   }
 
+
+
   return (
     <CalendarContext.Provider
       value={{
-        events: calendarEvents,
+        localEvents,
+        calendarEvents,
         weekStartsOn,
         currentMonth,
         setCurrentMonth,

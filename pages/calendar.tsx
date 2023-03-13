@@ -12,6 +12,10 @@ import { transformAvailibility } from '../lib/players';
 const TheCalendar = () => {
   let localEvents: CalendarEventType[] = [
     { date: new Date(2023, 2, 6), dateString: "20230306", name: 'Teaser release', type: "normal" },
+    { date: new Date(2023, 3, 20), dateString: "20230420", name: 'Nesji in 🇯🇵', type: "normal" },
+    { date: new Date(2023, 3, 29), dateString: "20230429", name: 'Zerakos 🥳', type: "normal" },
+    { date: new Date(2023, 4, 14), dateString: "20230514", name: 'Nesji back 🇯🇵', type: "normal" },
+    { date: new Date(2023, 6, 6), dateString: "20230706", name: 'Droop 🥳', type: "normal" },
   ];
 
   return <Calendar localEvents={localEvents} />;

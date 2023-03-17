@@ -1,5 +1,5 @@
 import React, { MouseEventHandler, useCallback } from "react";
-import { isSameDay, isSameMonth, isToday, format } from "date-fns";
+import { isSameDay, isSameMonth, format } from "date-fns";
 import { useCalendar } from "./CalendarContext";
 import CalendarEvent from "./CalendarEvent";
 import { sortyByPlayerName } from "../../lib/players";
@@ -18,6 +18,7 @@ const CalendarCell: React.FunctionComponent<Props> = ({ date }) => {
     handleMove,
     handleEnd,
     selectedDates,
+    isToday
   } = useCalendar();
 
   if (!currentMonth || !setSelectedDate) return null;

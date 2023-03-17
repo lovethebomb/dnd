@@ -44,12 +44,14 @@ type CalendarContextType = {
     player: Player,
     dates: string[]
   ) => Promise<{ data: { [x: string]: any }[]; error: PostgrestError }>;
+  isToday: (date: Date|number) => boolean
 };
 
 const CalendarContext = React.createContext<Partial<CalendarContextType>>({});
 
 import { supabase } from "../../lib/supabaseClient";
 import { PostgrestError } from "@supabase/supabase-js";
+import { isToday as DateFnsIsToday } from "date-fns";
 
 export const useCalendar = () => useContext(CalendarContext);
 
@@ -93,6 +95,7 @@ export const CalendarProvider: React.FunctionComponent<
   console.debug("[provider] render", subscription, calendarEvents, localEvents);
   let firstTarget = null;
   let lastMoveTarget = null;
+  let beforeLastMoveTarget = null;
   const canSelectDates = true;
 
   // Touch events
@@ -106,6 +109,7 @@ export const CalendarProvider: React.FunctionComponent<
 
     isSelecting.current = true;
     firstTarget = e.currentTarget;
+    lastMoveTarget = e.currentTarget;
 
     if (selectedDates.current.has(dateString)) {
       selectedDates.current.delete(dateString);
@@ -127,14 +131,34 @@ export const CalendarProvider: React.FunctionComponent<
       return;
     }
 
+
+    /*
+
+    Cell   Cell
+    */
+   let cellToUpdate = e.currentTarget
+   if (beforeLastMoveTarget === e.currentTarget) {
+    console.debug('going back!')
+   }
+
+    if (lastMoveTarget !== beforeLastMoveTarget) {
+      beforeLastMoveTarget = lastMoveTarget
+    }
     lastMoveTarget = e.currentTarget;
+
+    console.debug('handleMove', {
+      firstTarget,
+      lastMoveTarget,
+      beforeLastMoveTarget,
+      cellToUpdate
+    })
 
     if (selectedDates.current.has(dateString)) {
       selectedDates.current.delete(dateString);
-      e.currentTarget.removeAttribute("data-selected");
+      cellToUpdate.removeAttribute("data-selected");
     } else {
       selectedDates.current.add(dateString);
-      e.currentTarget.setAttribute("data-selected", "true");
+      cellToUpdate.setAttribute("data-selected", "true");
     }
   }
 
@@ -146,6 +170,7 @@ export const CalendarProvider: React.FunctionComponent<
     isSelecting.current = false;
     firstTarget = null;
     lastMoveTarget = null;
+    beforeLastMoveTarget = null;
     updateSelectedEvents(selectedPlayer);
   }
 
@@ -317,6 +342,10 @@ export const CalendarProvider: React.FunctionComponent<
     };
   }
 
+  function isToday(date: Date|number) {
+    return DateFnsIsToday(date)
+  }
+
 
 
   return (
@@ -344,6 +373,8 @@ export const CalendarProvider: React.FunctionComponent<
         // Logic
         updateEvents,
         updateDates,
+        // date-fns
+        isToday
       }}
     >
       {children}

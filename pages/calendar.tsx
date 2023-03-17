@@ -22,6 +22,7 @@ const TheCalendar = () => {
 }
 
 const CalendarPage = () => {
+  console.debug('calendar page render')
   return (
     <div className="container">
       <Head>

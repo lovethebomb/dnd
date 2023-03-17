@@ -22,7 +22,8 @@ export type CalendarProps = {
 const Calendar: React.FunctionComponent<CalendarProps> = ({
   localEvents,
   weekStartsOn = 1,
-}) => (
+}) => {
+  return (
   <div className="calendar">
     <CalendarProvider localEvents={localEvents} weekStartsOn={weekStartsOn}>
       <CalendarHeader />
@@ -32,6 +33,6 @@ const Calendar: React.FunctionComponent<CalendarProps> = ({
 
     </CalendarProvider>
   </div>
-);
+)};
 
 export default Calendar;

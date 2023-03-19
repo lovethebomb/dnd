@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { addMonths, isLastDayOfMonth, subMonths, format, sub } from "date-fns";
+import { addMonths, isLastDayOfMonth, subMonths, format, sub, isSameDay } from "date-fns";
 import { CalendarEvent, CalendarWeekStartsOn } from "./Calendar";
 import {
   convertToDate,
@@ -343,9 +343,9 @@ export const CalendarProvider: React.FunctionComponent<
   }
 
   function isToday(date: Date|number) {
-    return DateFnsIsToday(date)
+    const today = new Date()
+    return isSameDay(date, today)
   }
-
 
 
   return (

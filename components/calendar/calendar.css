@@ -95,15 +95,7 @@ border-bottom-right-radius: 8px;
   user-select: none;
 }
 
-@media (min-width: 768px) {
-  .calendar-event {
-    font-size: 12px;
-    float: none;
-    height: auto;
-    width: auto;
 
-  }
-}
 
 .calendar-event.calendar-event--player {
   background-color: var(--color-player);
@@ -131,6 +123,7 @@ border-bottom-right-radius: 8px;
   padding: 8px;
   border-radius: 8px;
   border: 1px solid #5d5d5d0d;
+  flex-wrap: wrap;
 }
 
 .calendar-form select {
@@ -169,6 +162,7 @@ color: #fff;
 }
 
 .calendar-form-success {
+  width: 100%;
   visibility: hidden;
   opacity: 0.001;
   color: #4caf50;
@@ -179,4 +173,22 @@ color: #fff;
   visibility: visible;
   opacity: 1;
   transition: opacity 0s linear;
+}
+
+@media (min-width: 768px) {
+  .calendar-event {
+    font-size: 12px;
+    float: none;
+    height: auto;
+    width: auto;
+
+  }
+
+  .calendar-form > div {
+    flex-wrap: auto;
+  }
+
+  .calendar-form-success {
+    width: auto;
+  }
 }

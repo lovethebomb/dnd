@@ -83,12 +83,28 @@ border-bottom-right-radius: 8px;
 }
 
 .calendar-event {
+  overflow: hidden;
+  width: 4px;
+  height: 4px;
+  border-radius: 4px;
+  font-size: 0;
+  float: left;
   background-color: var(--color-event);
   padding: 4px;
   margin-bottom: 0px;
-  font-size: 12px;
   user-select: none;
 }
+
+@media (min-width: 768px) {
+  .calendar-event {
+    font-size: 12px;
+    float: none;
+    height: auto;
+    width: auto;
+
+  }
+}
+
 .calendar-event.calendar-event--player {
   background-color: var(--color-player);
 }

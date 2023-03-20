@@ -344,7 +344,6 @@ export const CalendarProvider: React.FunctionComponent<
   }
 
   function isToday(date: Date|number) {
-    console.debug('isToday', date, today)
     return isSameDay(date, today)
   }
 

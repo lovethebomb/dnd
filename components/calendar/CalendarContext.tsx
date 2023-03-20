@@ -66,6 +66,7 @@ export const CalendarProvider: React.FunctionComponent<
 > = ({ children, localEvents, weekStartsOn }) => {
   const [calendarEvents, setEvents] = useState([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [today, setToday] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date>();
   const selectedDates = useRef<Set<string>>(new Set());
   const isSelecting = useRef(false);
@@ -343,7 +344,7 @@ export const CalendarProvider: React.FunctionComponent<
   }
 
   function isToday(date: Date|number) {
-    const today = new Date()
+    console.debug('isToday', date, today)
     return isSameDay(date, today)
   }
 

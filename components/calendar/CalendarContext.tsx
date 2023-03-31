@@ -66,7 +66,7 @@ export const CalendarProvider: React.FunctionComponent<
 > = ({ children, localEvents, weekStartsOn }) => {
   const [calendarEvents, setEvents] = useState([]);
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [today, setToday] = useState(new Date());
+  const [today, setToday] = useState(null);
   const [selectedDate, setSelectedDate] = useState<Date>();
   const selectedDates = useRef<Set<string>>(new Set());
   const isSelecting = useRef(false);
@@ -83,6 +83,7 @@ export const CalendarProvider: React.FunctionComponent<
   let subscription = null;
   useEffect(() => {
     getInitialEvents();
+    setToday(new Date())
 
     return () => {
       subscription.unsubscribe();

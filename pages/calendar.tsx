@@ -7,6 +7,10 @@ import Calendar from '../components/calendar/Calendar';
 import { CalendarEvent as CalendarEventType } from '../components/calendar/Calendar';
 
 import { transformAvailibility } from '../lib/players';
+import dynamic from 'next/dynamic'
+const DynamicCalendar = dynamic(() => import('../components/calendar/Calendar'), {
+  loading: () => <p>Loading...</p>,
+})
 
 
 const TheCalendar = () => {
@@ -19,7 +23,7 @@ const TheCalendar = () => {
     { date: new Date(2023, 3, 3), dateString: "20230706", name: 'Game night 🐲', type: "normal" },
   ];
 
-  return <Calendar localEvents={localEvents} />;
+  return <DynamicCalendar localEvents={localEvents} />;
 }
 
 const CalendarPage = () => {

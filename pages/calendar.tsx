@@ -20,7 +20,9 @@ const TheCalendar = () => {
     { date: new Date(2023, 3, 29), dateString: "20230429", name: 'Zerakos 🥳', type: "normal" },
     { date: new Date(2023, 4, 14), dateString: "20230514", name: 'Nesji back 🇯🇵', type: "normal" },
     { date: new Date(2023, 6, 6), dateString: "20230706", name: 'Droop 🥳', type: "normal" },
-    { date: new Date(2023, 3, 3), dateString: "20230706", name: 'Game night 🐲', type: "normal" },
+    { date: new Date(2023, 3, 4), dateString: "20230706", name: 'Game night 🐲', type: "normal" },
+    { date: new Date(2023, 3, 11), dateString: "20230706", name: 'Game night 🐲', type: "normal" },
+    { date: new Date(2023, 3, 17), dateString: "20230706", name: 'Game night 🐲', type: "normal" },
   ];
 
   return <DynamicCalendar localEvents={localEvents} />;
